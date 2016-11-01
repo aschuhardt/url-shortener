@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var sqlite = require('sqlite3');
 var shortid = require('shortid');
 var urlapi = require('url');
+var validUrl = require('valid-url');
 
 var app = express();
 const PORT = 80;
@@ -51,19 +52,20 @@ app.get('/:key', function(req, res) {
   var key = req.params['key'];
   db.serialize(function() {
     //by default, invalid requests redirect to root dir
-    var destination = '/';
     var stmt = db.prepare("SELECT url FROM Routes WHERE id = ?");
     stmt.get(key, function(err, row) {
       //if the provided key was valid, then
       //  set our destination to the stored URL
+      var destination = '/';
       if (typeof row != 'undefined') {
-        destination = row.url;
+	if (validUrl.isUri(row.url)) {
+          destination = row.url;
+	}
       }
+      res.writeHead(302, { 'Location': destination });
+      res.end();
     });
     stmt.finalize();
-    //redirect client to target url
-    res.writeHead(302, { 'Location': destination });
-    res.end();
   });
 });
 

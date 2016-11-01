@@ -52,12 +52,16 @@ app.get('/:key', function(req, res) {
   db.serialize(function() {
     var stmt = db.prepare("SELECT url FROM Routes WHERE id = ?");
     stmt.get(key, function(err, row) {
+			//if the provided key was valid...
       if (typeof row != 'undefined') {
+				//redirect client to target url
         res.writeHead(302, {
           'Location': row.url
         });
         res.end();
       } else {
+				//otherwise, tell the client they did something wrong
+				//TODO: probably redirect to root directory here
         res.send('The requested route does not exist!');
       }
     });

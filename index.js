@@ -41,8 +41,8 @@ app.post('/submit', function(req, res) {
   console.log('Record created: ' + newID + '/' + url + '/' + timestamp + '/' + hits);
   res.render("success", { url: urlapi.format({
     protocol: req.protocol,
-    pathname: newID,
-    port: PORT })
+    hostname: req.hostname,
+    pathname: newID })
   });
 });
 

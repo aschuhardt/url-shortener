@@ -32,7 +32,7 @@ app.post('/submit', function(req, res) {
   var url = req.body.url;
 
   urlInfo = urlapi.parse(url);
-  if (urlInfo.protocol == null) {
+  if (urlInfo.protocol == null && url.length > 0) {
     url = 'http://' + url;
   }
   if (validUrl.isUri(url)) {
@@ -67,7 +67,6 @@ app.get('/:key', function(req, res) {
       //  set our destination to the stored URL
       var destination = '/';
       if (typeof row != 'undefined') {
-        //check whether user specified protocol and add "http" if they didn't
         var targetUrl = row.url;
       	if (validUrl.isUri(targetUrl)) {
           destination = targetUrl;

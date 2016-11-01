@@ -30,21 +30,30 @@ app.get('/', function(req, res) {
 //used for creating new entries in routes database
 app.post('/submit', function(req, res) {
   var url = req.body.url;
-  var newID = shortid.generate();
-  var timestamp = new Date().getTime() / 1000;
-  var hits = 0;
-  db.serialize(function() {
-    var stmt = db.prepare("INSERT INTO Routes VALUES (?, ?, ?, ?)");
-    stmt.run(newID, url, hits, timestamp);
-    stmt.finalize();
-  });
-  //log record creation
-  console.log('Record created: ' + newID + '/' + url + '/' + timestamp + '/' + hits);
-  res.render("success", { url: urlapi.format({
-    protocol: req.protocol,
-    hostname: req.hostname,
-    pathname: newID })
-  });
+
+  urlInfo = urlapi.parse(url);
+  if (urlInfo.protocol == null) {
+    url = 'http://' + url;
+  }
+  if (validUrl.isUri(url)) {
+    var newID = shortid.generate();
+    var timestamp = new Date().getTime() / 1000;
+    var hits = 0;
+    db.serialize(function() {
+      var stmt = db.prepare("INSERT INTO Routes VALUES (?, ?, ?, ?)");
+      stmt.run(newID, url, hits, timestamp);
+      stmt.finalize();
+    });
+    //log record creation
+    console.log('Record created: ' + newID + '/' + url + '/' + timestamp + '/' + hits);
+    res.render("success", { url: urlapi.format({
+      protocol: req.protocol,
+      hostname: req.hostname,
+      pathname: newID })
+    });
+  } else {
+    console.log('Invalid URL entered: ' + url);
+  }
 });
 
 //handles requests for individual ID keys (shortid)
@@ -60,10 +69,6 @@ app.get('/:key', function(req, res) {
       if (typeof row != 'undefined') {
         //check whether user specified protocol and add "http" if they didn't
         var targetUrl = row.url;
-        var urlInfo = urlapi.parse(targetUrl);
-        if (urlInfo.protocol == null) {
-          targetUrl = 'http://' + targetUrl;
-        }
       	if (validUrl.isUri(targetUrl)) {
           destination = targetUrl;
       	}

@@ -58,9 +58,15 @@ app.get('/:key', function(req, res) {
       //  set our destination to the stored URL
       var destination = '/';
       if (typeof row != 'undefined') {
-	if (validUrl.isUri(row.url)) {
-          destination = row.url;
-	}
+        //check whether user specified protocol and add "http" if they didn't
+        var targetUrl = row.url;
+        var urlInfo = urlapi.parse(targetUrl);
+        if (urlInfo.protocol == null) {
+          targetUrl = 'http://' + targetUrl;
+        }
+      	if (validUrl.isUri(targetUrl)) {
+          destination = targetUrl;
+      	}
       }
       res.writeHead(302, { 'Location': destination });
       res.end();

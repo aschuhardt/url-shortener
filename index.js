@@ -17,7 +17,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //initialize sqlite database
 var db = new sqlite.Database(DB_NAME);
-db.run("CREATE TABLE IF NOT EXISTS Routes (id TEXT, url TEXT, hits INTEGER, created_on INTEGER)");
+db.run("CREATE TABLE IF NOT EXISTS Routes "
+       + "(id TEXT, url TEXT, hits INTEGER, created_on INTEGER)");
 
 //root directory, show index page
 app.get('/', function(req, res) {
@@ -36,13 +37,13 @@ app.post('/submit', function(req, res) {
     stmt.run(newID, url, hits, timestamp);
     stmt.finalize();
   });
+  //log record creation
   console.log('Record created: ' + newID + '/' + url + '/' + timestamp + '/' + hits);
   res.render("success", { url: urlapi.format({
-      protocol: req.protocol,
-      hostname: req.hostname,
-      pathname: newID,
-      port: PORT
-    })
+    protocol: req.protocol,
+    hostname: req.hostname,
+    pathname: newID,
+    port: PORT })
   });
 });
 
@@ -50,22 +51,20 @@ app.post('/submit', function(req, res) {
 app.get('/:key', function(req, res) {
   var key = req.params['key'];
   db.serialize(function() {
+    //by default, invalid requests redirect to root dir
+    var destination = '/';
     var stmt = db.prepare("SELECT url FROM Routes WHERE id = ?");
     stmt.get(key, function(err, row) {
-      //if the provided key was valid...
+      //if the provided key was valid, then
+      //  set our destination to the stored URL
       if (typeof row != 'undefined') {
-        //redirect client to target url
-        res.writeHead(302, {
-          'Location': row.url
-        });
-        res.end();
-      } else {
-        //otherwise, tell the client they did something wrong
-        //TODO: probably redirect to root directory here
-        res.send('The requested route does not exist!');
+        destination = row.url;
       }
     });
     stmt.finalize();
+    //redirect client to target url
+    res.writeHead(302, { 'Location': destination });
+    res.end();
   });
 });
 

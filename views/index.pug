@@ -1,0 +1,8 @@
+html
+	head
+		title= title
+	body
+		form(method='POST' action='/submit')
+			label(for='url') URL:
+			input(type='url', placeholder='enter address', name='url')
+			button(type='submit') Submit

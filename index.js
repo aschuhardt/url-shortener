@@ -53,6 +53,8 @@ app.post('/submit', function(req, res) {
     });
   } else {
     console.log('Invalid URL entered: ' + url);
+    res.writeHead(302, { 'Location': '/' });
+    res.end();
   }
 });
 

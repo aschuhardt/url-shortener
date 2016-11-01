@@ -19,9 +19,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //configure rate limiter
 var limiter = new ratelimit({
-  windowMs = 15*60*1000;
-  max: 100;
-  delayMs: 100;
+  windowMs = 15*60*1000,
+  max: 100,
+  delayMs: 100
 });
 app.use(limiter);
 

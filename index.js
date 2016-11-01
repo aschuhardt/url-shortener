@@ -5,7 +5,7 @@ var shortid = require('shortid');
 var urlapi = require('url');
 
 var app = express();
-const PORT = 1714;
+const PORT = 80;
 const ROUTE_LIFESPAN = 600;
 const DB_NAME = 'routes.db';
 
@@ -41,7 +41,6 @@ app.post('/submit', function(req, res) {
   console.log('Record created: ' + newID + '/' + url + '/' + timestamp + '/' + hits);
   res.render("success", { url: urlapi.format({
     protocol: req.protocol,
-    hostname: req.hostname,
     pathname: newID,
     port: PORT })
   });

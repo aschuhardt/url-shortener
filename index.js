@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 var sqlite = require('sqlite3');
 var shortid = require('shortid');
 var urlapi = require('url');
-var validUrl = require('valid-url');
+var validator = require('validator');
 
 var app = express();
 const PORT = 80;
@@ -35,7 +35,7 @@ app.post('/submit', function(req, res) {
   if (urlInfo.protocol == null && url.length > 0) {
     url = 'http://' + url;
   }
-  if (validUrl.isUri(url)) {
+  if (validator.isURL(url)) {
     var newID = shortid.generate();
     var timestamp = new Date().getTime() / 1000;
     var hits = 0;
@@ -70,7 +70,7 @@ app.get('/:key', function(req, res) {
       var destination = '/';
       if (typeof row != 'undefined') {
         var targetUrl = row.url;
-      	if (validUrl.isUri(targetUrl)) {
+      	if (validator.isURL(targetUrl)) {
           destination = targetUrl;
       	}
       }

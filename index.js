@@ -4,6 +4,7 @@ var sqlite = require('sqlite3');
 var shortid = require('shortid');
 var urlapi = require('url');
 var validator = require('validator');
+var ratelimit = require('express-rate-limit');
 
 var app = express();
 const PORT = 80;
@@ -15,6 +16,14 @@ app.set('view engine', 'pug');
 app.locals.pretty = true;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+//configure rate limiter
+var limiter = new ratelimit({
+  windowMs = 15*60*1000;
+  max: 100;
+  delayMs: 100;
+});
+app.use(limiter);
 
 //initialize sqlite database
 var db = new sqlite.Database(DB_NAME);

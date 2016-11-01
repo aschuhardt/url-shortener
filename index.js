@@ -9,18 +9,22 @@ const PORT = 1714;
 const ROUTE_LIFESPAN = 600;
 const DB_NAME = 'routes.db';
 
+//set up express server configuration
 app.set('view engine', 'pug');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//initialize in-memory database
+//initialize sqlite database
 var db = new sqlite.Database(DB_NAME);
 db.run("CREATE TABLE Routes (id TEXT, url TEXT, hits INTEGER, created_on INTEGER)");
 
+//root directory, show index page
 app.get('/', function(req, res) {
 	res.render('index', { title: 'URL Shortener' });
 });
 
+//handles POST requests to "/submit"
+//used for creating new entries in routes database
 app.post('/submit', function(req, res) {
 	var url = req.body.url;
 	var newID = shortid.generate();
@@ -30,7 +34,7 @@ app.post('/submit', function(req, res) {
 		var stmt = db.prepare("INSERT INTO Routes VALUES (?, ?, ?, ?)");
 		stmt.run(newID, url, hits, timestamp);
 		stmt.finalize();
-	});	
+	});
 	console.log('Record created: ' + newID + '/' + url + '/' + timestamp + '/' + hits);
 	res.render("success", { url: urlapi.format({
 			protocol: req.protocol,
@@ -41,6 +45,7 @@ app.post('/submit', function(req, res) {
 	});
 });
 
+//handles requests for individual ID keys (shortid)
 app.get('/:key', function(req, res) {
 	var key = req.params['key'];
 	db.serialize(function() {
@@ -56,7 +61,7 @@ app.get('/:key', function(req, res) {
 			}
 		});
 		stmt.finalize();
-	});	
+	});
 });
 
 app.listen(PORT, function() {

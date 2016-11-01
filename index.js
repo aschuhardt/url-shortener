@@ -11,12 +11,13 @@ const DB_NAME = 'routes.db';
 
 //set up express server configuration
 app.set('view engine', 'pug');
+app.locals.pretty = true;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //initialize sqlite database
 var db = new sqlite.Database(DB_NAME);
-db.run("CREATE TABLE Routes (id TEXT, url TEXT, hits INTEGER, created_on INTEGER)");
+db.run("CREATE TABLE IF NOT EXISTS Routes (id TEXT, url TEXT, hits INTEGER, created_on INTEGER)");
 
 //root directory, show index page
 app.get('/', function(req, res) {

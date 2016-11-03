@@ -60,7 +60,8 @@ app.post('/submit', function(req, res) {
     res.send("Your new URL is " + urlapi.format({
       protocol: req.protocol,
       hostname: req.hostname,
-      pathname: newID));
+      pathname: newID})
+    );
   } else {
     // console.log('Invalid URL entered: ' + url);
     // res.writeHead(302, { 'Location': '/' });

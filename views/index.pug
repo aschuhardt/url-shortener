@@ -27,4 +27,10 @@ html
             $('#button-submit').prop('disabled', false);
           }
         });
+        //input key press event
+        $('#input-url').keypress(function(e) {
+          if (e.keyCode == 13) {
+            $('#button-submit').trigger('click');
+          }
+        });
       });

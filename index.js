@@ -37,9 +37,8 @@ app.get('/', function(req, res) {
 
 //handles POST requests to "/submit"
 //used for creating new entries in routes database
-app.get('/submit', function(req, res) {
+app.post('/submit', function(req, res) {
   var url = req.body.url;
-
   urlInfo = urlapi.parse(url);
   if (urlInfo.protocol == null && url.length > 0) {
     url = 'http://' + url;

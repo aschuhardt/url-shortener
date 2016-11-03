@@ -3,43 +3,27 @@ html
   head
     title= title
   body
-    form(id='form-submit', method='POST', action='/submit', novalidate)
-      label(for='url') URL:
-      input(id='input-url', type='url', placeholder='enter address', name='url')
-      button(type='submit') Submit
+    label(for='url') URL:
+    input(id='input-url', type='url', placeholder='enter address', name='url')
+    button(id='button-submit') Submit
     label(id='label-output')
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
     script(type='text/javascript').
-      function processForm(e) {
-        if (e.preventDefault) e.preventDefault();
-
-        //get information url from input
-        var userDefinedURL = document.getElementById('input-url').value;
-
-        //send url in POST request to server
-        var request = new XMLHttpRequest();
-        request.open('GET', '/submit', true);
-
-        //set up request
-        request.onload = function() {
-          if (request.status >= 200 && request.status < 400) {
-            var resp = request.responseText;
-            document.getElementById('label-output').value = resp;
-          } else {
-            document.getElementById('label-output').value = 'An error occurred.';
-          }
-        };
-
-        request.onerror = function() {
-          document.getElementById('label-output').value = 'A connection error occurred.';
-        };
-
-        request.send("url=" + userDefinedURL);
-        return false;
-      }
-
-      var form = document.getElementById('form-submit');
-      if (form.attachEvent) {
-        form.attachEvent("submit", processForm);
-      } else {
-        form.addEventListener("submit", processForm);
-      }
+      $(document).read(function() {
+        $('#button-submit').click(function() {
+          $.ajax({
+            url: "/submit",
+            data: {
+              "url": $('#input-url').val();
+            },
+            cache: false,
+            type: 'POST',
+            success: function(res) {
+              $('label-output').text(res);
+            },
+            error: function(err) {
+              $('label-output').text(res);
+            }
+          });
+        });        
+      });

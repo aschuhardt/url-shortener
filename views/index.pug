@@ -4,7 +4,7 @@ html
     title= title
   body
     label(for='url') URL:
-    input(id='input-url', type='url', placeholder='enter address', name='url')
+    input(id='input-url', type='url', placeholder='enter address')
     button(id='button-submit') Submit
     label(id='label-output')
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
@@ -19,10 +19,10 @@ html
             cache: false,
             type: 'POST',
             success: function(res) {
-              $('label-output').text(res);
+              $('#label-output').text(res);
             },
             error: function(err) {
-              $('label-output').text(res);
+              $('#label-output').text(res);
             }
           });
         });

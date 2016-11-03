@@ -62,14 +62,14 @@ app.post('/submit', function(req, res) {
     //short version (doesn't have protocol) for display
     var shortformat = urlapi.format({
       hostname: req.hostname,
-      pathname: newID})
+      pathname: newID}
     );
 
     //long version (contains protocol) for href
     var longformat = urlapi.format({
       protocol: req.protocol,
       hostname: req.hostname,
-      pathname: newID})
+      pathname: newID}
     );
 
     res.send("<span>Your new URL is <a href='" + longformat + "'>" + shortformat + "</a></span>");

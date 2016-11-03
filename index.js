@@ -34,14 +34,14 @@ app.use(limiter);
 compressor.minify({
   compressor: 'uglifyjs',
   input: path.join(__dirname, '/scripts/index.js'),
-  output: path.join(__dirname, '/scripts/index-min.js')
+  output: path.join(__dirname, '/public/scripts/index.js')
 });
 
 //render stylesheet
 sass.render({
   file: path.join(__dirname, '/styles/style.scss')
 }, function(err, result) {
-  fs.writeFile(path.join(__dirname, '/styles/style.css'), result.css);
+  fs.writeFile(path.join(__dirname, '/public/styles/style.css'), result.css);
 });
 
 //initialize sqlite database
@@ -49,8 +49,7 @@ var db = new sqlite.Database(DB_NAME);
 db.run("CREATE TABLE IF NOT EXISTS Routes "
        + "(id TEXT, url TEXT, hits INTEGER, created_on INTEGER)");
 
-app.use(express.static(path.join(__dirname, 'styles')));
-app.use(express.static(path.join(__dirname, 'robots.txt')));
+app.use(express.static('public'));
 
 //root directory, show index page
 app.get('/', function(req, res) {
@@ -132,11 +131,6 @@ app.get('/:key', function(req, res) {
     });
     stmt.finalize();
   });
-});
-
-//give the user the minified version of our script file
-app.get('/scripts/index.js', function(req, res) {
-  res.sendFile(path.join(__dirname, '/scripts/index-min.js'));
 });
 
 app.listen(PORT, function() {

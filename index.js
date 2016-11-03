@@ -99,7 +99,7 @@ app.post('/submit', function(req, res) {
       pathname: newID}
     );
 
-    res.send("<span>Your new URL is <a href='" + longformat + "'>" + shortformat + "</a></span>");
+    res.send("Your new URL is <a href='" + longformat + "'>" + shortformat + "</a>");
   } else {
     // console.log('Invalid URL entered: ' + url);
     // res.writeHead(302, { 'Location': '/' });

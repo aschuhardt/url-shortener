@@ -32,14 +32,16 @@ db.run("CREATE TABLE IF NOT EXISTS Routes "
 
 //root directory, show index page
 app.get('/', function(req, res) {
+  console.log('Root requested...');
   res.render('index', { title: 'URL Shortener' });
 });
 
 //handles POST requests to "/submit"
 //used for creating new entries in routes database
 app.post('/submit', function(req, res) {
+  console.log('POST received...');
   var url = req.body.url;
-  console.log('POST received: ' + req);
+  console.log('URL submitted: ' + url);
   urlInfo = urlapi.parse(url);
   if (urlInfo.protocol == null && url.length > 0) {
     url = 'http://' + url;
@@ -71,6 +73,7 @@ app.post('/submit', function(req, res) {
 //handles requests for individual ID keys (shortid)
 app.get('/:key', function(req, res) {
   var key = req.params['key'];
+  console.log('Route requested for key: ' + key);
   db.serialize(function() {
     //by default, invalid requests redirect to root dir
     var stmt = db.prepare("SELECT url FROM Routes WHERE id = ?");

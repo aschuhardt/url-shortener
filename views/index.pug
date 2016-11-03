@@ -8,4 +8,5 @@ html
     button(id='button-submit') Submit
     div(id='div-output')
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
-    script(src="http://#{host}/scripts/index.js")
+    - var localScriptSrc = "http://" + host + "/scripts/index.js";
+    script(src=#{localScriptSrc})

@@ -6,7 +6,7 @@ html
     label(for='url') URL:
     input(id='input-url', type='url', placeholder='enter address')
     button(id='button-submit') Submit
-    label(id='label-output')
+    div(id='div-output')
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
     script(type='text/javascript').
       $(document).ready(function() {
@@ -16,7 +16,7 @@ html
             url: $("#input-url").val()
           },
           function(data, status) {
-            $('#label-output').html(data);
+            $('#div-output').html(data);
           });
         });
       });

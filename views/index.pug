@@ -10,6 +10,7 @@ html
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
     script(type='text/javascript').
       $(document).ready(function() {
+        //button click event
         $('#button-submit').click(function() {
           $.post("/submit",
           {
@@ -18,5 +19,12 @@ html
           function(data, status) {
             $('#div-output').html(data);
           });
+          $('#button-submit').prop('disabled', true);
+        });
+        //input change event
+        $('#input-url').change(function() {
+          if ($('#button-submit').prop('disabled')) {
+            $('#button-submit').prop('disabled', false);
+          }
         });
       });

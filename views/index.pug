@@ -11,6 +11,7 @@ html
     script(type='text/javascript').
       $(document).read(function() {
         $('#button-submit').click(function() {
+          alert('asdf');
           $.ajax({
             url: "/submit",
             data: {
@@ -25,5 +26,5 @@ html
               $('label-output').text(res);
             }
           });
-        });        
+        });
       });

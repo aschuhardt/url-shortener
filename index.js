@@ -5,6 +5,7 @@ var shortid = require('shortid');
 var urlapi = require('url');
 var validator = require('validator');
 var RateLimit = require('express-rate-limit');
+var compressor = require('node-minify');
 
 var app = express();
 const PORT = 80;
@@ -24,6 +25,13 @@ var limiter = new RateLimit({
   delayMs: 100
 });
 app.use(limiter);
+
+//minimize index.js script
+compressor.minify({
+  compressor: 'uglifyjs',
+  input: __dirname + '/script/index.js',
+  output: __dirname + '/script/index-min.js'
+});
 
 //initialize sqlite database
 var db = new sqlite.Database(DB_NAME);
@@ -105,6 +113,10 @@ app.get('/:key', function(req, res) {
     stmt.finalize();
   });
 });
+
+app.get('/scripts/index.js') {
+  res.sendFile(__dirname + '/script/index-min.js');
+}
 
 app.listen(PORT, function() {
   console.log('listening...');

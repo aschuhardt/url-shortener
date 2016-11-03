@@ -41,7 +41,7 @@ db.run("CREATE TABLE IF NOT EXISTS Routes "
 //root directory, show index page
 app.get('/', function(req, res) {
   console.log('Root requested...');
-  res.render('index', { title: 'URL Shortener' });
+  res.render('index', { title: 'URL Shortener', host: req.hostname });
 });
 
 //handles POST requests to "/submit"
@@ -64,7 +64,13 @@ app.post('/submit', function(req, res) {
       stmt.finalize();
     });
     //log record creation
-    console.log('Record created: ' + newID + '/' + url + '/' + timestamp + '/' + hits);
+    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    console.log('Record created: '
+      + newID + '/'
+      + url + '/'
+      + timestamp + '/'
+      + hits + '/'
+      + ip);
 
     //create two versions of URL, short and long
     //short version (doesn't have protocol) for display
@@ -116,6 +122,12 @@ app.get('/:key', function(req, res) {
 
 app.get('/scripts/index.js', function(req, res) {
   res.sendFile(__dirname + '/scripts/index-min.js');
+});
+
+app.get('/robots.txt', function(req, res) {
+  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  console.log('Indexing request from '+ ip);
+  res.sendFile(__dirname + '/robots.txt');
 });
 
 app.listen(PORT, function() {

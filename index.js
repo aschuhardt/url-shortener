@@ -62,7 +62,7 @@ app.post('/submit', function(req, res) {
     //short version (doesn't have protocol) for display
     var shortformat = urlapi.format({
       hostname: req.hostname,
-      pathname: newID}
+      pathname: '/' + newID}
     );
 
     //long version (contains protocol) for href

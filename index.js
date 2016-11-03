@@ -57,11 +57,22 @@ app.post('/submit', function(req, res) {
     });
     //log record creation
     console.log('Record created: ' + newID + '/' + url + '/' + timestamp + '/' + hits);
-    res.send("Your new URL is " + urlapi.format({
+
+    //create two versions of URL, short and long
+    //short version (doesn't have protocol) for display
+    var shortformat = urlapi.format({
+      hostname: req.hostname,
+      pathname: newID})
+    );
+
+    //long version (contains protocol) for href
+    var longformat = urlapi.format({
       protocol: req.protocol,
       hostname: req.hostname,
       pathname: newID})
     );
+
+    res.send("Your new URL is <a href='" + longformat + "'>" + shortformat + "</a>");
   } else {
     // console.log('Invalid URL entered: ' + url);
     // res.writeHead(302, { 'Location': '/' });

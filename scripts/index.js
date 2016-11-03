@@ -10,11 +10,11 @@ function enableEnter() {
 $(document).ready(function() {
   //button click event
   $('#button-submit').click(function() {
-    var url = $("#input-url").val();
-    if (!/^\s*$/.test(url)) {
+    var inputUrl = $("#input-url").val();
+    if (!/^\s*$/.test(inputUrl)) {
       $.post("/submit",
       {
-        url: $("#input-url").val()
+        url: inputUrl
       },
       function(data, status) {
         $('#div-output').html(data);

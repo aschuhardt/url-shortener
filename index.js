@@ -7,9 +7,10 @@ var validator = require('validator');
 var RateLimit = require('express-rate-limit');
 var compressor = require('node-minify');
 var sass = require('node-sass');
+var fs = require('fs');
+var path = require('path');
 
 var app = express();
-var styleContents = '';
 
 const PORT = 80;
 const ROUTE_LIFESPAN = 600;
@@ -32,21 +33,24 @@ app.use(limiter);
 //minimize index.js script
 compressor.minify({
   compressor: 'uglifyjs',
-  input: __dirname + '/scripts/index.js',
-  output: __dirname + '/scripts/index-min.js'
+  input: path.join(__dirname, '/scripts/index.js'),
+  output: path.join(__dirname, '/scripts/index-min.js')
 });
 
 //render stylesheet
 sass.render({
-  file: __dirname + '/styles/style.css'
+  file: path.join(__dirname, '/styles/style.scss')
 }, function(err, result) {
-  styleContents = result;
+  fs.writeFile(path.join(__dirname, '/styles/style.css'), result.css);
 });
 
 //initialize sqlite database
 var db = new sqlite.Database(DB_NAME);
 db.run("CREATE TABLE IF NOT EXISTS Routes "
        + "(id TEXT, url TEXT, hits INTEGER, created_on INTEGER)");
+
+app.use(express.static(path.join(__dirname, 'styles')));
+app.use(express.static(path.join(__dirname, 'robots.txt')));
 
 //root directory, show index page
 app.get('/', function(req, res) {
@@ -130,18 +134,9 @@ app.get('/:key', function(req, res) {
   });
 });
 
+//give the user the minified version of our script file
 app.get('/scripts/index.js', function(req, res) {
-  res.sendFile(__dirname + '/scripts/index-min.js');
-});
-
-app.get('/robots.txt', function(req, res) {
-  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  console.log('Indexing request from '+ ip);
-  res.sendFile(__dirname + '/robots.txt');
-});
-
-app.get('/styles/style.css', function(req, res) {
-  res.send(styleContents);
+  res.sendFile(path.join(__dirname, '/scripts/index-min.js'));
 });
 
 app.listen(PORT, function() {

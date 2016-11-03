@@ -73,6 +73,7 @@ app.post('/submit', function(req, res) {
 //handles requests for individual ID keys (shortid)
 app.get('/:key', function(req, res) {
   var key = req.params['key'];
+  if (key == 'favicon.ico') { return; }
   console.log('Route requested for key: ' + key);
   db.serialize(function() {
     //by default, invalid requests redirect to root dir

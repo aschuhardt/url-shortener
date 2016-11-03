@@ -16,7 +16,7 @@ html
             url: $("#input-url").val()
           },
           function(data, status) {
-            alert("Data: " + data + "\nStatus: " + status);
+            $('#label-output').html(data);
           });
         });
       });

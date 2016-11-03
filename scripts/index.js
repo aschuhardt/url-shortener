@@ -10,16 +10,19 @@ function enableEnter() {
 $(document).ready(function() {
   //button click event
   $('#button-submit').click(function() {
-    $.post("/submit",
-    {
-      url: $("#input-url").val()
-    },
-    function(data, status) {
-      $('#div-output').html(data);
-    });
-    $('#button-submit').prop('disabled', true);
-    disableBtn = true;
-    setTimeout('enableButton()', 2000);
+    var url = $("#input-url").val();
+    if (!/^\s*$/.test(url)) {
+      $.post("/submit",
+      {
+        url: $("#input-url").val()
+      },
+      function(data, status) {
+        $('#div-output').html(data);
+      });
+      $('#button-submit').prop('disabled', true);
+      disableBtn = true;
+      setTimeout('enableButton()', 2000);
+    }
   });
   //input change event
   $('#input-url').on('change keyup paste', function() {

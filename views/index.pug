@@ -9,6 +9,9 @@ html
     div(id='div-output')
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
     script(type='text/javascript').
+      function enableButton() {
+        $('#button-submit').removeAttr('disabled');
+      }
       $(document).ready(function() {
         //button click event
         $('#button-submit').click(function() {
@@ -20,6 +23,7 @@ html
             $('#div-output').html(data);
           });
           $('#button-submit').prop('disabled', true);
+          setTimeout('enableButton()', 2000);
         });
         //input change event
         $('#input-url').on('change keyup paste', function() {

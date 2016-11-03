@@ -14,7 +14,7 @@ const DB_NAME = 'routes.db';
 
 //set up express server configuration
 app.set('view engine', 'pug');
-// app.locals.pretty = true;
+app.locals.pretty = true;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

@@ -37,7 +37,7 @@ app.get('/', function(req, res) {
 
 //handles POST requests to "/submit"
 //used for creating new entries in routes database
-app.post('/submit', function(req, res) {
+app.get('/submit', function(req, res) {
   var url = req.body.url;
 
   urlInfo = urlapi.parse(url);
@@ -61,9 +61,10 @@ app.post('/submit', function(req, res) {
       pathname: newID })
     });
   } else {
-    console.log('Invalid URL entered: ' + url);
-    res.writeHead(302, { 'Location': '/' });
-    res.end();
+    // console.log('Invalid URL entered: ' + url);
+    // res.writeHead(302, { 'Location': '/' });
+    // res.end();
+    res.send('Invalid URL entered.');
   }
 });
 

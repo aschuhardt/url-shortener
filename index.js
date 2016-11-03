@@ -57,10 +57,15 @@ app.post('/submit', function(req, res) {
     });
     //log record creation
     console.log('Record created: ' + newID + '/' + url + '/' + timestamp + '/' + hits);
-    res.render("success", { url: urlapi.format({
-      protocol: req.protocol,
-      hostname: req.hostname,
-      pathname: newID })
+    res.render("success", {layout: false}, function(err, html) {
+      var response = {
+        url: urlapi.format({
+          protocol: req.protocol,
+          hostname: req.hostname,
+          pathname: newID
+        })
+      };
+      res.send(response);
     });
   } else {
     // console.log('Invalid URL entered: ' + url);

@@ -17,7 +17,7 @@ $(document).ready(function() {
         url: inputUrl
       },
       function(data, status) {
-        $('#div-output').html(data);
+        $('#output').html(data);
       });
       $('#button-submit').prop('disabled', true);
       disableBtn = true;

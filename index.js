@@ -29,8 +29,8 @@ app.use(limiter);
 //minimize index.js script
 compressor.minify({
   compressor: 'uglifyjs',
-  input: __dirname + '/script/index.js',
-  output: __dirname + '/script/index-min.js'
+  input: __dirname + '/scripts/index.js',
+  output: __dirname + '/scripts/index-min.js'
 });
 
 //initialize sqlite database
@@ -115,7 +115,7 @@ app.get('/:key', function(req, res) {
 });
 
 app.get('/scripts/index.js', function(req, res) {
-  res.sendFile(__dirname + '/script/index-min.js');
+  res.sendFile(__dirname + '/scripts/index-min.js');
 });
 
 app.listen(PORT, function() {

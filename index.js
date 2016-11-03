@@ -114,9 +114,9 @@ app.get('/:key', function(req, res) {
   });
 });
 
-app.get('/scripts/index.js') {
+app.get('/scripts/index.js', function() {
   res.sendFile(__dirname + '/script/index-min.js');
-}
+});
 
 app.listen(PORT, function() {
   console.log('listening...');

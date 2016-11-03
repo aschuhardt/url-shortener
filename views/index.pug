@@ -11,19 +11,12 @@ html
       script(type='text/javascript').
         $(document).ready(function() {
           $('#button-submit').click(function() {
-            $.ajax({
-              url: "/submit",
-              data: {
-                "url": $('#input-url').val();
-              },
-              cache: false,
-              type: 'POST',
-              success: function(res) {
-                $('#label-output').text(res);
-              },
-              error: function(err) {
-                $('#label-output').text(res);
-              }
+            $.post("/submit",
+            {
+              url: $("#input-url").val()
+            },
+            function(data, status) {
+              alert("Data: " + data + "\nStatus: " + status);
             });
           });
         });

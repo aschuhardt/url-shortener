@@ -32,7 +32,6 @@ $(document).ready(function() {
     if (e.keyCode == 13 && canEntr) {
       $('#button-submit').trigger('click');
       canEntr = false;
-      setTimeout('enableEnter()', 5000);
     }
   });
   $('#input-url').keyup(function(e) {

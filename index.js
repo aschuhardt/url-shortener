@@ -6,8 +6,11 @@ var urlapi = require('url');
 var validator = require('validator');
 var RateLimit = require('express-rate-limit');
 var compressor = require('node-minify');
+var sass = require('node-sass');
 
 var app = express();
+var styleContents = '';
+
 const PORT = 80;
 const ROUTE_LIFESPAN = 600;
 const DB_NAME = 'routes.db';
@@ -31,6 +34,13 @@ compressor.minify({
   compressor: 'uglifyjs',
   input: __dirname + '/scripts/index.js',
   output: __dirname + '/scripts/index-min.js'
+});
+
+//render stylesheet
+sass.render({
+  file: __dirname + '/styles/style.css'
+}, function(err, result) {
+  styleContents = result;
 });
 
 //initialize sqlite database
@@ -128,6 +138,10 @@ app.get('/robots.txt', function(req, res) {
   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   console.log('Indexing request from '+ ip);
   res.sendFile(__dirname + '/robots.txt');
+});
+
+app.get('/styles/style.css', function(req, res) {
+  res.send(styleContents);
 });
 
 app.listen(PORT, function() {

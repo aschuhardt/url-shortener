@@ -1,12 +1,15 @@
 doctype html
 html
   head
+    link(rel='stylesheet', href='/styles/style.css')
     title= title
   body
-    label(for='input-url') URL:
-    input(id='input-url', type='url', placeholder='enter address')
-    button(id='button-submit') Submit
-    div(id='div-output')
-    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
-    - var localScriptSrc = "http://" + host + "/scripts/index.js";
-    script(src=localScriptSrc)
+    .block#main
+      .block#input
+        label#label-input(for='input-url') URL:
+        input#input-url(type='url', placeholder='enter address')
+        button#button-submit Submit
+      .block#output
+      script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
+      - var localScriptSrc = "http://" + host + "/scripts/index.js";
+      script(src=localScriptSrc)

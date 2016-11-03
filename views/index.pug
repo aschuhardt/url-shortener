@@ -9,8 +9,10 @@ html
     div(id='div-output')
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
     script(type='text/javascript').
+      var keepButtonDisabled = false;
       function enableButton() {
         $('#button-submit').removeAttr('disabled');
+        keepButtonDisabled = false;
       }
       $(document).ready(function() {
         //button click event
@@ -23,6 +25,7 @@ html
             $('#div-output').html(data);
           });
           $('#button-submit').prop('disabled', true);
+          keepButtonDisabled = true;
           setTimeout('enableButton()', 2000);
         });
         //input change event
@@ -33,7 +36,7 @@ html
         });
         //input key press event
         $('#input-url').keypress(function(e) {
-          if (e.keyCode == 13) {
+          if (e.keyCode == 13 && !keepButtonDisabled) {
             $('#button-submit').trigger('click');
           }
         });

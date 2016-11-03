@@ -1,7 +1,11 @@
-var keepButtonDisabled = false;
+var disableBtn = false;
+var canEntr = true;
 function enableButton() {
   $('#button-submit').removeAttr('disabled');
-  keepButtonDisabled = false;
+  disableBtn = false;
+}
+function enableEnter() {
+  canEntr = true;
 }
 $(document).ready(function() {
   //button click event
@@ -14,19 +18,26 @@ $(document).ready(function() {
       $('#div-output').html(data);
     });
     $('#button-submit').prop('disabled', true);
-    keepButtonDisabled = true;
+    disableBtn = true;
     setTimeout('enableButton()', 2000);
   });
   //input change event
   $('#input-url').on('change keyup paste', function() {
-    if ($('#button-submit').prop('disabled') == true && !keepButtonDisabled) {
+    if ($('#button-submit').prop('disabled') == true && !disableBtn) {
       enableButton();
     }
   });
   //input key press event
   $('#input-url').keypress(function(e) {
-    if (e.keyCode == 13) {
+    if (e.keyCode == 13 && canEntr) {
       $('#button-submit').trigger('click');
+      canEntr = false;
+      setTimeout('enableEnter()', 5000);
+    }
+  });
+  $('#input-url').keyup(function(e) {
+    if (e.keyCode == 13 && !canEntr) {
+      setTimeout('enableEnter()', 2000);
     }
   });
 });
